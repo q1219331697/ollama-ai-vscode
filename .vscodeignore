@@ -1,0 +1,12 @@
+
+.vscode/**
+src/**
+tsconfig.json
+out/**/*.js.map
+*.vsix
+.gitignore
+release/**
+gen-icon.py
+check-pil.py
+verify-png.py
+generate-icon.js

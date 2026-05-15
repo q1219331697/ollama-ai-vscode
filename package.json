@@ -1,0 +1,168 @@
+{
+  "name": "ollama-ai-vscode",
+  "displayName": "lzz AI",
+  "description": "一个 VS Code 扩展，向 Ollama 发送提示词并展示模型回复。",
+  "version": "0.0.1",
+  "license": "Apache-2.0",
+  "icon": "resources/icon.png",
+  "publisher": "q1219331697",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/q1219331697/ollama-ai-vscode"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "ollamaAi-sidebar",
+          "title": "lzz AI",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "ollamaAi-sidebar": [
+        {
+          "type": "webview",
+          "id": "ollamaAi.chatView",
+          "name": "Chat",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "ollamaAi.ask",
+        "title": "lzz: Ask AI",
+        "category": "lzz AI"
+      },
+      {
+        "command": "ollamaAi.askSelection",
+        "title": "lzz: Ask AI from Selection",
+        "category": "lzz AI"
+      },
+      {
+        "command": "ollamaAi.askAndCopy",
+        "title": "lzz: Ask AI and Copy Response",
+        "category": "lzz AI"
+      },
+      {
+        "command": "ollamaAi.selectModel",
+        "title": "lzz: Select Local Model",
+        "category": "lzz AI"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "lzz AI",
+      "properties": {
+        "ollamaAi.cliPath": {
+          "type": "string",
+          "default": "ollama",
+          "description": "Ollama 命令行工具的路径。"
+        },
+        "ollamaAi.model": {
+          "type": "string",
+          "default": "qwen2.5",
+          "description": "用于提示词的 Ollama 模型名称。"
+        },
+        "ollamaAi.backend": {
+          "type": "string",
+          "enum": [
+            "cli",
+            "http"
+          ],
+          "default": "cli",
+          "description": "选择使用本地 Ollama 命令行工具还是本地 HTTP 接口。"
+        },
+        "ollamaAi.httpUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:11434/api/prompt",
+          "description": "Ollama 或兼容模型服务器的本地 HTTP 接口地址。"
+        },
+        "ollamaAi.autoExecuteCommand": {
+          "type": "string",
+          "enum": [
+            "none",
+            "askSelection",
+            "askAndCopy"
+          ],
+          "default": "none",
+          "description": "当配置的触发条件满足时自动执行命令。"
+        },
+        "ollamaAi.autoExecuteOnSelectionChange": {
+          "type": "boolean",
+          "default": false,
+          "description": "当活动选区变化时自动执行选定的命令。"
+        },
+        "ollamaAi.autoExecuteOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "当活动文本文档保存时自动执行选定的命令。"
+        },
+        "ollamaAi.autoExecuteDebounceMs": {
+          "type": "number",
+          "default": 300,
+          "minimum": 0,
+          "description": "自动命令执行的去抖延迟（毫秒）。"
+        },
+        "ollamaAi.timeoutMs": {
+          "type": "number",
+          "default": 120000,
+          "minimum": 1000,
+          "description": "命令行和 HTTP 后端调用的请求超时时间（毫秒）。"
+        },
+        "ollamaAi.retryCount": {
+          "type": "number",
+          "default": 2,
+          "minimum": 0,
+          "description": "发生超时或临时错误时的重试次数。"
+        },
+        "ollamaAi.retryDelayMs": {
+          "type": "number",
+          "default": 500,
+          "minimum": 0,
+          "description": "临时错误后重试前的延迟时间（毫秒）。"
+        },
+        "ollamaAi.temperature": {
+          "type": "number",
+          "default": 0.7,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Ollama 模型的温度参数。"
+        },
+        "ollamaAi.maxTokens": {
+          "type": "number",
+          "default": 512,
+          "minimum": 1,
+          "description": "Ollama 回复的最大令牌数。"
+        },
+        "ollamaAi.openResponseAsMarkdown": {
+          "type": "boolean",
+          "default": true,
+          "description": "以 Markdown 文档而非纯文本编辑器打开 AI 回复。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "prepackage": "node -e \"require('fs').mkdirSync('release',{recursive:true})\"",
+    "package": "vsce package --allow-missing-repository -o release/ollama-ai-vscode-%npm_package_version%.vsix"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/vscode": "^1.80.0",
+    "@vscode/vsce": "^3.0.0",
+    "typescript": "^5.5.0"
+  }
+}
